@@ -1,0 +1,76 @@
+# Saturday Fine-Tuning Config — GPT-oss 120B (5B active MoE)
+# ==========================================================
+# Single H100 GPU with QLoRA — no DeepSpeed needed
+# Compact enough for rapid iteration and prototyping
+
+base_model: "openai-community/gpt-oss-120b"
+model_type: causal_lm
+trust_remote_code: true
+torch_dtype: bfloat16
+
+# LoRA Configuration
+use_lora: true
+lora_r: 64
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+lora_bias: none
+
+# QLoRA 4-bit Quantization
+use_4bit: true
+bnb_4bit_compute_dtype: bfloat16
+bnb_4bit_quant_type: nf4
+bnb_4bit_use_double_quant: true
+
+# Training Hyperparameters
+num_train_epochs: 3
+per_device_train_batch_size: 4
+per_device_eval_batch_size: 4
+gradient_accumulation_steps: 8
+learning_rate: 2e-5
+weight_decay: 0.01
+warmup_ratio: 0.05
+lr_scheduler_type: cosine
+max_grad_norm: 1.0
+
+# Sequence
+max_seq_length: 8192
+packing: true
+
+# Checkpointing
+save_strategy: steps
+save_steps: 100
+save_total_limit: 5
+eval_strategy: steps
+eval_steps: 100
+logging_steps: 10
+
+# Output
+output_dir: ./saturday_model_gptoss
+run_name: saturday_gptoss_v1
+
+# Memory Optimization
+gradient_checkpointing: true
+fp16: false
+bf16: true
+optim: paged_adamw_8bit
+
+# DeepSpeed — not needed for single GPU
+use_deepspeed: false
+deepspeed_config: null
+
+# Data
+data_dir: ./training_data
+eval_split: 0.05
+shuffle_seed: 42
+
+# Reporting
+report_to: none
+seed: 42

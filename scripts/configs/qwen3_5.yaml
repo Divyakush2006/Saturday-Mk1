@@ -1,0 +1,76 @@
+# Saturday Fine-Tuning Config — Qwen 3.5 397B (17B active MoE)
+# =============================================================
+# Multi-GPU training with DeepSpeed ZeRO-3
+# Requires 4-8x H100 80GB GPUs
+
+base_model: "Qwen/Qwen3.5-397B"
+model_type: causal_lm
+trust_remote_code: true
+torch_dtype: bfloat16
+
+# LoRA Configuration
+use_lora: true
+lora_r: 64
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+lora_bias: none
+
+# QLoRA 4-bit Quantization
+use_4bit: true
+bnb_4bit_compute_dtype: bfloat16
+bnb_4bit_quant_type: nf4
+bnb_4bit_use_double_quant: true
+
+# Training Hyperparameters
+num_train_epochs: 2
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 64
+learning_rate: 1e-5
+weight_decay: 0.01
+warmup_ratio: 0.03
+lr_scheduler_type: cosine
+max_grad_norm: 1.0
+
+# Sequence
+max_seq_length: 8192
+packing: true
+
+# Checkpointing
+save_strategy: steps
+save_steps: 50
+save_total_limit: 3
+eval_strategy: steps
+eval_steps: 50
+logging_steps: 5
+
+# Output
+output_dir: ./saturday_model_qwen
+run_name: saturday_qwen_v1
+
+# Memory Optimization
+gradient_checkpointing: true
+fp16: false
+bf16: true
+optim: paged_adamw_8bit
+
+# DeepSpeed ZeRO-3 (required for this model size)
+use_deepspeed: true
+deepspeed_config: scripts/configs/ds_zero3.json
+
+# Data
+data_dir: ./training_data
+eval_split: 0.05
+shuffle_seed: 42
+
+# Reporting
+report_to: none
+seed: 42

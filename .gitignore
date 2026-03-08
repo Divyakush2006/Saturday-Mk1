@@ -1,0 +1,38 @@
+# Secrets
+.env
+*.env
+.saturday_jwt_secret
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Saturday
+.saturday_memory/
+saturday_model/
+saturday.db
+*.log
+test_output.txt
+test_results.log
+test_integration_report.txt
+
+# Data (large — not needed in git)
+eval_results/
+training_data/
+distillation_data/
+scratch/
+browser_recordings/
+html_artifacts/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Deployment
+.vercel/
+node_modules/

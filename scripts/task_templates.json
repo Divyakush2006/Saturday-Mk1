@@ -1,0 +1,805 @@
+{
+    "version": "1.0",
+    "total_templates": 64,
+    "system_prompt": "You are Saturday, an enterprise-grade coding AI assistant. You write production-ready, secure, well-documented code that follows industry best practices. You reason step-by-step before writing code, consider edge cases, and never leave security vulnerabilities. Your code is MNC-grade: ready for Fortune 500 deployment.",
+    "categories": {
+        "security": {
+            "expert_id": 1,
+            "templates": [
+                {
+                    "id": "sec_001",
+                    "type": "vulnerability_fix",
+                    "prompt": "The following Python Flask endpoint is vulnerable to SQL injection. Identify the vulnerability, explain the risk, and rewrite the function using parameterized queries:\n\n```python\n@app.route('/users')\ndef get_user():\n    username = request.args.get('username')\n    query = f\"SELECT * FROM users WHERE username = '{username}'\"\n    result = db.execute(query)\n    return jsonify(result.fetchall())\n```",
+                    "difficulty": "medium",
+                    "tags": [
+                        "sql_injection",
+                        "flask",
+                        "parameterized_queries"
+                    ]
+                },
+                {
+                    "id": "sec_002",
+                    "type": "auth_implementation",
+                    "prompt": "Implement a production-ready JWT authentication middleware for a FastAPI application. Requirements:\n1. Token generation with configurable expiry\n2. Token refresh mechanism\n3. Role-based access control (admin, user, viewer)\n4. Rate limiting on auth endpoints\n5. Secure password hashing with bcrypt\n6. Protection against timing attacks\nInclude all necessary imports and error handling.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "jwt",
+                        "fastapi",
+                        "rbac",
+                        "authentication"
+                    ]
+                },
+                {
+                    "id": "sec_003",
+                    "type": "vulnerability_fix",
+                    "prompt": "This Express.js middleware has multiple security issues. Identify ALL vulnerabilities (there are at least 5) and provide a hardened version:\n\n```javascript\nconst express = require('express');\nconst app = express();\n\napp.use((req, res, next) => {\n  res.setHeader('Access-Control-Allow-Origin', '*');\n  next();\n});\n\napp.post('/upload', (req, res) => {\n  const filename = req.body.filename;\n  const content = req.body.content;\n  fs.writeFileSync('/uploads/' + filename, content);\n  res.send('Uploaded: ' + filename);\n});\n\napp.get('/file', (req, res) => {\n  const path = req.query.path;\n  res.sendFile(path);\n});\n```",
+                    "difficulty": "hard",
+                    "tags": [
+                        "xss",
+                        "path_traversal",
+                        "cors",
+                        "file_upload",
+                        "express"
+                    ]
+                },
+                {
+                    "id": "sec_004",
+                    "type": "crypto_implementation",
+                    "prompt": "Implement a secure file encryption/decryption utility in Python using AES-256-GCM. Requirements:\n1. Key derivation from password using Argon2id\n2. Unique nonce per encryption\n3. Authentication tag verification on decryption\n4. Streaming support for large files (don't load entire file into memory)\n5. Secure key wiping from memory after use\nProvide complete implementation with error handling.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "aes",
+                        "encryption",
+                        "argon2",
+                        "streaming"
+                    ]
+                },
+                {
+                    "id": "sec_005",
+                    "type": "vulnerability_audit",
+                    "prompt": "Perform a security audit on this Django REST API serializer and view. List every vulnerability, its CWE number, CVSS score estimate, and the fix:\n\n```python\nclass UserSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = User\n        fields = '__all__'\n\nclass UserViewSet(viewsets.ModelViewSet):\n    queryset = User.objects.all()\n    serializer_class = UserSerializer\n    \n    def create(self, request):\n        user = User.objects.create(\n            username=request.data['username'],\n            password=request.data['password'],\n            is_staff=request.data.get('is_staff', False)\n        )\n        return Response({'id': user.id, 'password': user.password})\n```",
+                    "difficulty": "hard",
+                    "tags": [
+                        "django",
+                        "mass_assignment",
+                        "password_exposure",
+                        "cwe"
+                    ]
+                },
+                {
+                    "id": "sec_006",
+                    "type": "secure_api_design",
+                    "prompt": "Design and implement a secure API rate limiter for a microservices architecture. Requirements:\n1. Token bucket algorithm with Redis backend\n2. Per-user, per-endpoint, and global rate limits\n3. Sliding window for burst protection\n4. Graceful degradation if Redis is unavailable\n5. Rate limit headers in responses (X-RateLimit-*)\n6. Whitelist/blacklist support\nProvide Python implementation with async support.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "rate_limiting",
+                        "redis",
+                        "token_bucket",
+                        "microservices"
+                    ]
+                },
+                {
+                    "id": "sec_007",
+                    "type": "secrets_management",
+                    "prompt": "Implement a secrets management wrapper that supports multiple backends (environment variables, AWS Secrets Manager, HashiCorp Vault) with automatic rotation, caching, and audit logging. Include:\n1. Abstract backend interface\n2. At least 2 concrete implementations\n3. TTL-based cache with secure memory handling\n4. Audit log for every secret access\n5. Fallback chain (try Vault -> AWS -> env vars)",
+                    "difficulty": "expert",
+                    "tags": [
+                        "secrets",
+                        "vault",
+                        "aws",
+                        "rotation"
+                    ]
+                },
+                {
+                    "id": "sec_008",
+                    "type": "input_sanitization",
+                    "prompt": "Build a comprehensive input sanitization library for a web application that handles:\n1. HTML/XSS prevention with allowlisted tags\n2. SQL injection prevention\n3. Command injection prevention\n4. LDAP injection prevention\n5. Path traversal prevention\n6. Unicode normalization attacks\n7. ReDoS-safe regex validation\nEach sanitizer should log attempted attacks. Provide Python implementation.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "sanitization",
+                        "xss",
+                        "injection",
+                        "unicode"
+                    ]
+                }
+            ]
+        },
+        "enterprise": {
+            "expert_id": 2,
+            "templates": [
+                {
+                    "id": "ent_001",
+                    "type": "architecture_pattern",
+                    "prompt": "Implement a CQRS (Command Query Responsibility Segregation) pattern with Event Sourcing for an e-commerce order management system in Python. Include:\n1. Command handlers (CreateOrder, UpdateOrder, CancelOrder)\n2. Event store with append-only log\n3. Query-side read models with eventual consistency\n4. Saga pattern for multi-step order fulfillment\n5. Snapshot mechanism for performance\nProvide production-ready code with proper error handling and logging.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "cqrs",
+                        "event_sourcing",
+                        "saga",
+                        "ddd"
+                    ]
+                },
+                {
+                    "id": "ent_002",
+                    "type": "design_pattern",
+                    "prompt": "Implement a plugin architecture for a data processing pipeline. The system should:\n1. Discover plugins at runtime from a directory\n2. Load plugins with dependency injection\n3. Support plugin lifecycle (init, process, teardown)\n4. Handle plugin failures with circuit breaker pattern\n5. Support plugin hot-reloading without restart\n6. Provide plugin sandboxing (resource limits, timeout)\nImplement in Python with type hints and comprehensive docstrings.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "plugin_architecture",
+                        "dependency_injection",
+                        "circuit_breaker"
+                    ]
+                },
+                {
+                    "id": "ent_003",
+                    "type": "database_design",
+                    "prompt": "Design a multi-tenant database architecture for a SaaS application that supports:\n1. Row-level security with PostgreSQL RLS\n2. Tenant isolation verification\n3. Cross-tenant query prevention\n4. Tenant-aware connection pooling\n5. Data migration between tenants\n6. Tenant provisioning and deprovisioning\nProvide SQLAlchemy models, migration scripts, and middleware.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "multi_tenant",
+                        "postgresql",
+                        "rls",
+                        "saas"
+                    ]
+                },
+                {
+                    "id": "ent_004",
+                    "type": "api_design",
+                    "prompt": "Design a versioned REST API with GraphQL gateway for a microservices-based healthcare platform. Include:\n1. API versioning strategy (URI vs header)\n2. GraphQL schema stitching from multiple services\n3. Authentication/authorization middleware\n4. Request validation with OpenAPI spec\n5. Response pagination with cursor-based scrolling\n6. HIPAA-compliant audit logging\nProvide FastAPI + Strawberry GraphQL implementation.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "api_versioning",
+                        "graphql",
+                        "hipaa",
+                        "microservices"
+                    ]
+                },
+                {
+                    "id": "ent_005",
+                    "type": "distributed_system",
+                    "prompt": "Implement a distributed task queue with exactly-once semantics using Python. Requirements:\n1. Task registration with decorators\n2. Priority queues with Redis backend\n3. Exactly-once execution with idempotency keys\n4. Dead letter queue for failed tasks\n5. Task chaining and fan-out/fan-in patterns\n6. Real-time monitoring dashboard data\n7. Graceful shutdown with task draining\nDo NOT use Celery — build from scratch.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "distributed_queue",
+                        "exactly_once",
+                        "redis",
+                        "idempotency"
+                    ]
+                },
+                {
+                    "id": "ent_006",
+                    "type": "migration",
+                    "prompt": "Write a zero-downtime database migration system for a live PostgreSQL production database serving 10K requests/second. Support:\n1. Schema changes without locks (online DDL)\n2. Backfill strategies for new columns\n3. Dual-write during migration period\n4. Rollback mechanism\n5. Progress tracking and ETA\n6. Validation checks pre/post migration\nProvide Python implementation with asyncpg.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "migration",
+                        "zero_downtime",
+                        "postgresql",
+                        "online_ddl"
+                    ]
+                },
+                {
+                    "id": "ent_007",
+                    "type": "observability",
+                    "prompt": "Build a comprehensive observability stack integration for a Python microservices application:\n1. Structured logging with correlation IDs across services\n2. Distributed tracing with OpenTelemetry\n3. Custom metrics with Prometheus client\n4. Health check endpoints with dependency checks\n5. SLO/SLI monitoring and alerting rules\n6. Error budgeting calculator\nProvide complete implementation with Docker compose for the observability stack.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "observability",
+                        "opentelemetry",
+                        "prometheus",
+                        "logging"
+                    ]
+                },
+                {
+                    "id": "ent_008",
+                    "type": "caching",
+                    "prompt": "Implement a multi-layer caching system for a high-traffic API:\n1. L1: In-process LRU cache with TTL\n2. L2: Redis distributed cache with write-through\n3. L3: CDN cache headers\n4. Cache invalidation strategies (event-driven, TTL, manual)\n5. Cache stampede prevention (mutex, probabilistic early recomputation)\n6. Cache warming on deployment\n7. Metrics: hit rate, latency, memory usage\nPython implementation with async support.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "caching",
+                        "redis",
+                        "lru",
+                        "stampede_prevention"
+                    ]
+                }
+            ]
+        },
+        "debug": {
+            "expert_id": 3,
+            "templates": [
+                {
+                    "id": "dbg_001",
+                    "type": "stack_trace_fix",
+                    "prompt": "A production Django application is throwing this error under load:\n\n```\nTraceback (most recent call last):\n  File \"/app/views/orders.py\", line 142, in process_order\n    with transaction.atomic():\n  File \"/app/services/payment.py\", line 89, in charge\n    result = stripe.Charge.create(**params)\n  File \"/venv/lib/stripe/api.py\", line 234, in create\n    response = requester.request('post', url, params)\ndjango.db.utils.OperationalError: could not serialize access due to concurrent update\n```\n\nThe error happens ~5% of the time during peak traffic. Diagnose the root cause, explain why it's intermittent, and provide a production fix that handles the concurrency issue properly.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "django",
+                        "concurrency",
+                        "serialization",
+                        "database"
+                    ]
+                },
+                {
+                    "id": "dbg_002",
+                    "type": "memory_leak",
+                    "prompt": "This Python service's memory usage grows from 200MB to 8GB over 24 hours, then gets OOM-killed. Profile and fix the memory leak:\n\n```python\nclass EventProcessor:\n    _handlers = {}  # class-level registry\n    \n    def __init__(self):\n        self.processed = []\n        self._callbacks = []\n        EventProcessor._handlers[id(self)] = self\n    \n    def register_callback(self, fn):\n        self._callbacks.append(lambda event: fn(self, event))\n    \n    def process(self, event):\n        for cb in self._callbacks:\n            cb(event)\n        self.processed.append(event)\n        return {'status': 'ok', 'event': event}\n    \n    async def consume(self, queue):\n        while True:\n            event = await queue.get()\n            result = self.process(event)\n            logging.debug(f\"Processed: {result}\")\n```\n\nIdentify ALL memory leak sources (there are at least 4), explain each, and provide the fixed version.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "memory_leak",
+                        "profiling",
+                        "gc",
+                        "closures"
+                    ]
+                },
+                {
+                    "id": "dbg_003",
+                    "type": "race_condition",
+                    "prompt": "This async Python code has a subtle race condition that causes duplicate payments ~0.1% of the time. Find it and fix it:\n\n```python\nclass PaymentService:\n    def __init__(self, db, stripe_client):\n        self.db = db\n        self.stripe_client = stripe_client\n        self._processing = set()\n    \n    async def process_payment(self, order_id: str, amount: float):\n        if order_id in self._processing:\n            return {'status': 'already_processing'}\n        \n        self._processing.add(order_id)\n        \n        try:\n            existing = await self.db.get_payment(order_id)\n            if existing and existing.status == 'completed':\n                return {'status': 'already_paid'}\n            \n            charge = await self.stripe_client.charge(amount)\n            await self.db.save_payment(order_id, charge.id, 'completed')\n            return {'status': 'success', 'charge_id': charge.id}\n        finally:\n            self._processing.discard(order_id)\n```\n\nExplain the race window, demonstrate how it leads to double charges, and provide a fix using database-level locking.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "race_condition",
+                        "async",
+                        "payments",
+                        "distributed_locking"
+                    ]
+                },
+                {
+                    "id": "dbg_004",
+                    "type": "performance_debug",
+                    "prompt": "This SQLAlchemy query takes 45 seconds on a table with 10M rows. Optimize it to run under 500ms:\n\n```python\ndef get_dashboard_stats(session, org_id, start_date, end_date):\n    results = session.query(\n        func.date_trunc('day', Event.created_at).label('day'),\n        func.count(Event.id).label('total'),\n        func.count(distinct(Event.user_id)).label('unique_users'),\n        func.avg(Event.duration).label('avg_duration'),\n    ).filter(\n        Event.org_id == org_id,\n        Event.created_at.between(start_date, end_date),\n        Event.type.in_(['page_view', 'click', 'purchase']),\n        Event.is_deleted == False,\n    ).group_by(\n        func.date_trunc('day', Event.created_at)\n    ).order_by('day').all()\n    \n    return [{...} for r in results]  # dict comprehension\n```\n\nProvide: (1) EXPLAIN ANALYZE interpretation, (2) missing indexes, (3) query rewrite, (4) potential partitioning strategy, (5) caching layer if needed.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "sql_optimization",
+                        "indexing",
+                        "sqlalchemy",
+                        "partitioning"
+                    ]
+                },
+                {
+                    "id": "dbg_005",
+                    "type": "deadlock",
+                    "prompt": "Two microservices are intermittently deadlocking. Service A updates orders then inventory. Service B updates inventory then orders. Both use PostgreSQL with row-level locks. Design and implement a solution that:\n1. Eliminates the deadlock possibility\n2. Maintains data consistency\n3. Works across microservice boundaries\n4. Includes deadlock detection and recovery\n5. Has proper retry logic with exponential backoff\nProvide complete Python implementation.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "deadlock",
+                        "postgresql",
+                        "microservices",
+                        "distributed_locks"
+                    ]
+                },
+                {
+                    "id": "dbg_006",
+                    "type": "flaky_test",
+                    "prompt": "This test passes 95% of the time but fails intermittently in CI. Find the root cause and fix both the test AND the underlying code issue:\n\n```python\nimport asyncio\nimport pytest\nfrom datetime import datetime, timedelta\n\nclass TokenCache:\n    def __init__(self, ttl_seconds=300):\n        self._cache = {}\n        self._ttl = ttl_seconds\n    \n    async def get_token(self, user_id):\n        if user_id in self._cache:\n            token, expires = self._cache[user_id]\n            if datetime.now() < expires:\n                return token\n        token = await self._fetch_new_token(user_id)\n        self._cache[user_id] = (token, datetime.now() + timedelta(seconds=self._ttl))\n        return token\n\n@pytest.mark.asyncio\nasync def test_token_caching():\n    cache = TokenCache(ttl_seconds=1)\n    t1 = await cache.get_token('user1')\n    t2 = await cache.get_token('user1')  # should be cached\n    assert t1 == t2\n    await asyncio.sleep(1)\n    t3 = await cache.get_token('user1')  # should be new\n    assert t3 != t1\n```",
+                    "difficulty": "medium",
+                    "tags": [
+                        "flaky_test",
+                        "timing",
+                        "async",
+                        "caching"
+                    ]
+                },
+                {
+                    "id": "dbg_007",
+                    "type": "encoding_bug",
+                    "prompt": "Users in Japan and Korea are reporting garbled text in exported CSV files, while US/EU users see correct output. The export code:\n\n```python\ndef export_to_csv(data, filename):\n    with open(filename, 'w') as f:\n        writer = csv.writer(f)\n        writer.writerow(['Name', 'Email', 'Company', 'Notes'])\n        for row in data:\n            writer.writerow([row['name'], row['email'], row['company'], row['notes']])\n    return filename\n```\n\nDiagnose why CJK characters are garbled, identify ALL encoding-related issues, and provide a fix that works globally. Also handle: BOM for Excel compatibility, mixed encodings in source data, and filename encoding on different OS.",
+                    "difficulty": "medium",
+                    "tags": [
+                        "encoding",
+                        "unicode",
+                        "csv",
+                        "cjk"
+                    ]
+                },
+                {
+                    "id": "dbg_008",
+                    "type": "crash_analysis",
+                    "prompt": "A Kubernetes pod is crash-looping with this pattern:\n- Starts successfully\n- Handles ~1000 requests normally\n- Suddenly exits with code 137 (SIGKILL)\n- Restarts, works for ~1000 requests, crashes again\n\nThe application is a FastAPI service with this setup:\n```python\napp = FastAPI()\nmodel = load_ml_model('/models/classifier.pkl')  # 2GB model\n\n@app.post('/predict')\nasync def predict(data: PredictRequest):\n    features = preprocess(data)\n    result = model.predict(features)\n    return {'prediction': result.tolist()}\n```\n\nPod spec: requests 512Mi, limits 4Gi. Diagnose the crash, explain the memory pattern, and provide a production fix including proper K8s resource configuration.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "kubernetes",
+                        "oom",
+                        "memory",
+                        "ml_serving"
+                    ]
+                }
+            ]
+        },
+        "general": {
+            "expert_id": 4,
+            "templates": [
+                {
+                    "id": "gen_001",
+                    "type": "algorithm",
+                    "prompt": "Implement a high-performance LRU cache in Python that:\n1. O(1) get and put operations\n2. Thread-safe with minimal lock contention\n3. Supports TTL per entry\n4. Has eviction callbacks\n5. Provides cache statistics (hit rate, eviction count)\n6. Supports max memory limit (not just count)\nInclude comprehensive type hints and docstrings.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "lru_cache",
+                        "data_structures",
+                        "threading"
+                    ]
+                },
+                {
+                    "id": "gen_002",
+                    "type": "data_processing",
+                    "prompt": "Build a streaming ETL pipeline in Python that:\n1. Reads from multiple sources (CSV, JSON, Parquet, database)\n2. Transforms data through composable transformer chain\n3. Handles backpressure with bounded buffers\n4. Supports exactly-once semantics with checkpointing\n5. Parallel processing with configurable worker count\n6. Error handling with dead letter queue\n7. Progress reporting and ETA\nUse async generators and no external ETL frameworks.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "etl",
+                        "streaming",
+                        "async_generators",
+                        "pipeline"
+                    ]
+                },
+                {
+                    "id": "gen_003",
+                    "type": "cli_tool",
+                    "prompt": "Build a production CLI tool in Python using Click that manages Docker Compose deployments:\n1. `deploy` - Build and deploy with health checks\n2. `rollback` - Rollback to previous version\n3. `status` - Show service health and resource usage\n4. `logs` - Aggregate and filter logs across services\n5. `scale` - Scale services with validation\n6. Config validation before any operation\n7. Rich terminal output with progress bars\nInclude proper error handling, logging, and shell completion.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "cli",
+                        "docker",
+                        "click",
+                        "deployment"
+                    ]
+                },
+                {
+                    "id": "gen_004",
+                    "type": "refactoring",
+                    "prompt": "Refactor this 200-line monolithic function into clean, testable components following SOLID principles:\n\n```python\ndef process_order(request):\n    # Validate input\n    if not request.get('items'):\n        return {'error': 'No items'}\n    if not request.get('user_id'):\n        return {'error': 'No user'}\n    # ... (imagine 200 lines of nested ifs, database calls, \n    # API calls to payment and shipping, email sending,\n    # inventory updates, analytics tracking, and error handling\n    # all mixed together)\n```\n\nProvide: (1) Extracted classes with single responsibility, (2) Dependency injection setup, (3) Unit tests for each component, (4) Integration test for the full flow, (5) Before/after comparison explaining each decision.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "refactoring",
+                        "solid",
+                        "dependency_injection",
+                        "testing"
+                    ]
+                },
+                {
+                    "id": "gen_005",
+                    "type": "websocket",
+                    "prompt": "Implement a real-time collaborative text editor backend using WebSockets and Operational Transformation (OT). Requirements:\n1. Concurrent editing by multiple users\n2. Conflict resolution using OT\n3. Cursor position sharing\n4. Undo/redo support per user\n5. Persistence layer with document versioning\n6. Reconnection handling with state sync\nPython with FastAPI WebSockets. Include the OT algorithm implementation.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "websocket",
+                        "ot",
+                        "collaborative",
+                        "real_time"
+                    ]
+                },
+                {
+                    "id": "gen_006",
+                    "type": "testing",
+                    "prompt": "Write a comprehensive test suite for a banking transfer service. The service handles:\n- Account balance checks\n- Multi-currency transfers with exchange rates\n- Transaction logging\n- Fraud detection triggers\n- Concurrent transfer handling\n\nProvide:\n1. Unit tests with mocked dependencies\n2. Integration tests with test database\n3. Property-based tests (hypothesis)\n4. Mutation testing setup\n5. Performance benchmarks\n6. Test fixtures and factories\nUse pytest with full coverage targets.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "testing",
+                        "pytest",
+                        "property_based",
+                        "banking"
+                    ]
+                },
+                {
+                    "id": "gen_007",
+                    "type": "async_patterns",
+                    "prompt": "Implement a robust async HTTP client wrapper with:\n1. Connection pooling with per-host limits\n2. Automatic retry with exponential backoff and jitter\n3. Circuit breaker pattern (closed/open/half-open states)\n4. Request/response interceptors (auth, logging, metrics)\n5. Timeout management (connect, read, total)\n6. Response caching with ETags\n7. Streaming response support\nPython with aiohttp, fully typed, production-ready.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "async",
+                        "http_client",
+                        "circuit_breaker",
+                        "retry"
+                    ]
+                },
+                {
+                    "id": "gen_008",
+                    "type": "data_structure",
+                    "prompt": "Implement a B+ tree in Python that can serve as a simple database index:\n1. Configurable branching factor\n2. Insert, delete, search, range query operations\n3. Leaf node linking for efficient range scans\n4. Disk serialization/deserialization (page-based I/O)\n5. Write-ahead log for crash recovery\n6. Concurrent read access support\nInclude correctness tests and performance benchmarks vs Python dict.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "b_plus_tree",
+                        "database",
+                        "indexing",
+                        "data_structures"
+                    ]
+                }
+            ]
+        },
+        "docs": {
+            "expert_id": 5,
+            "templates": [
+                {
+                    "id": "doc_001",
+                    "type": "api_documentation",
+                    "prompt": "Generate comprehensive API documentation for this payment processing module. Include:\n1. Module overview with architecture diagram (mermaid)\n2. Every public function with parameters, return types, exceptions, and examples\n3. Authentication and rate limiting details\n4. Error code reference table\n5. SDK usage examples in Python, JavaScript, and cURL\n6. Changelog and migration guide from v1 to v2\n\n```python\nclass PaymentProcessor:\n    def charge(self, amount: Decimal, currency: str, source: str, idempotency_key: str = None) -> ChargeResult: ...\n    def refund(self, charge_id: str, amount: Decimal = None, reason: str = None) -> RefundResult: ...\n    def create_subscription(self, customer_id: str, plan_id: str, trial_days: int = 0) -> Subscription: ...\n    def list_transactions(self, filters: TransactionFilter, page: int = 1, size: int = 50) -> PaginatedResult: ...\n```",
+                    "difficulty": "medium",
+                    "tags": [
+                        "api_docs",
+                        "mermaid",
+                        "payment",
+                        "sdk"
+                    ]
+                },
+                {
+                    "id": "doc_002",
+                    "type": "architecture_doc",
+                    "prompt": "Write an Architecture Decision Record (ADR) for migrating a monolithic Django application to microservices. Include:\n1. Context: Current monolith pain points\n2. Decision: Strangler fig migration pattern\n3. Consequences: Technical and organizational\n4. Service boundary definitions with bounded contexts\n5. Data ownership and inter-service communication strategy\n6. Risk analysis and mitigation plan\n7. Timeline and phased rollout plan\nFollow the Nygard ADR format.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "adr",
+                        "architecture",
+                        "microservices",
+                        "migration"
+                    ]
+                },
+                {
+                    "id": "doc_003",
+                    "type": "code_review",
+                    "prompt": "Write a thorough code review for this pull request implementing a user notification system. Evaluate:\n1. Code correctness\n2. Error handling completeness\n3. Security implications\n4. Performance considerations\n5. Test coverage adequacy\n6. API design consistency\n7. Documentation quality\n\nPR diff: [provide a realistic 300-line Python PR adding notification channels, templates, and delivery tracking]\n\nFormat your review as GitHub PR comments with line-specific feedback, using conventional review tags (nit:, suggestion:, critical:, question:).",
+                    "difficulty": "medium",
+                    "tags": [
+                        "code_review",
+                        "pr_review",
+                        "notification"
+                    ]
+                },
+                {
+                    "id": "doc_004",
+                    "type": "runbook",
+                    "prompt": "Write a production runbook for a microservices e-commerce platform covering:\n1. Service dependency map\n2. Common incident playbooks (DB failover, API gateway overload, payment timeout)\n3. Rollback procedures for each service\n4. Monitoring dashboards and alert escalation matrix\n5. Capacity planning thresholds\n6. Security incident response steps\n7. Post-mortem template\nFormat for on-call engineers with step-by-step checklists.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "runbook",
+                        "incident_response",
+                        "operations"
+                    ]
+                },
+                {
+                    "id": "doc_005",
+                    "type": "developer_guide",
+                    "prompt": "Write a comprehensive Developer Onboarding Guide for a team working on a Python/FastAPI microservices project. Include:\n1. Local development setup (Docker, env vars, database)\n2. Git workflow and branching strategy\n3. Code style guide and linting rules\n4. Testing requirements and CI/CD pipeline explanation\n5. Architecture overview with service map\n6. Common development tasks (add endpoint, add migration, add test)\n7. Debugging tips and common pitfalls\n8. PR checklist\nMake it copy-paste ready for new developers.",
+                    "difficulty": "medium",
+                    "tags": [
+                        "onboarding",
+                        "developer_guide",
+                        "setup"
+                    ]
+                },
+                {
+                    "id": "doc_006",
+                    "type": "changelog",
+                    "prompt": "Given these git commits, generate a professional CHANGELOG.md following Keep a Changelog format:\n```\nabc123 feat(auth): add OAuth2 PKCE flow for mobile apps\ndef456 fix(payments): handle currency rounding for JPY (no decimals)\nghi789 perf(search): add trigram index, 10x faster fuzzy search\njkl012 BREAKING: remove deprecated v1 API endpoints\nmno345 feat(notifications): add Slack and Teams webhook channels\npqr678 fix(export): handle unicode in CSV filenames\nstu901 chore(deps): bump FastAPI 0.110 -> 0.115\nvwx234 security: patch CVE-2026-1234 in auth middleware\n```\nGroup properly, include migration notes for breaking changes, and add impact analysis.",
+                    "difficulty": "easy",
+                    "tags": [
+                        "changelog",
+                        "semver",
+                        "release_notes"
+                    ]
+                },
+                {
+                    "id": "doc_007",
+                    "type": "rfc",
+                    "prompt": "Write an RFC (Request for Comments) for introducing a feature flag system into an existing production application. Cover:\n1. Motivation and use cases\n2. Proposed architecture (client SDK, flag storage, evaluation engine)\n3. Flag types (boolean, percentage, user-segment)\n4. Performance requirements (<5ms evaluation)\n5. Alternatives considered (LaunchDarkly vs custom)\n6. Implementation plan with milestones\n7. Testing and rollout strategy\n8. Risks and open questions\nFollow internal RFC format with sections for feedback.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "rfc",
+                        "feature_flags",
+                        "architecture_proposal"
+                    ]
+                },
+                {
+                    "id": "doc_008",
+                    "type": "docstring_generation",
+                    "prompt": "Add comprehensive Google-style docstrings to every function and class in this module. Include type information, parameter descriptions, return values, exceptions raised, usage examples, and cross-references to related functions:\n\n```python\nclass DataValidator:\n    def __init__(self, schema, strict=False):\n        self.schema = schema\n        self.strict = strict\n        self._compiled = self._compile(schema)\n    \n    def validate(self, data, path=''):\n        errors = []\n        for rule in self._compiled:\n            result = rule.check(data, path)\n            if not result.ok:\n                errors.append(result)\n        return ValidationResult(errors=errors, data=data)\n    \n    def validate_batch(self, items, fail_fast=False):\n        results = []\n        for i, item in enumerate(items):\n            r = self.validate(item, path=f'[{i}]')\n            results.append(r)\n            if fail_fast and not r.ok:\n                break\n        return results\n```",
+                    "difficulty": "easy",
+                    "tags": [
+                        "docstrings",
+                        "documentation",
+                        "type_hints"
+                    ]
+                }
+            ]
+        },
+        "devops": {
+            "expert_id": 6,
+            "templates": [
+                {
+                    "id": "ops_001",
+                    "type": "cicd",
+                    "prompt": "Create a production CI/CD pipeline using GitHub Actions for a Python microservices monorepo. Include:\n1. Matrix testing across Python 3.11/3.12/3.13\n2. Selective builds (only affected services)\n3. Security scanning (SAST, dependency audit, container scan)\n4. Database migration validation\n5. Blue-green deployment to AWS ECS\n6. Canary release with automatic rollback on error rate spike\n7. Slack notifications with deployment summary\n8. Pipeline caching for <3 min total time\nProvide complete YAML workflow files.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "github_actions",
+                        "cicd",
+                        "aws_ecs",
+                        "canary"
+                    ]
+                },
+                {
+                    "id": "ops_002",
+                    "type": "kubernetes",
+                    "prompt": "Write Kubernetes manifests for deploying a 3-tier application (API, Worker, PostgreSQL) with:\n1. Horizontal Pod Autoscaler based on custom metrics\n2. PodDisruptionBudgets for zero-downtime updates\n3. Network policies for service isolation\n4. Sealed secrets for sensitive config\n5. Init containers for DB migration\n6. Liveness and readiness probes with startup probes\n7. Resource quotas and limit ranges\n8. Persistent volumes with backup CronJob\nProvide Helm chart structure with values file.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "kubernetes",
+                        "helm",
+                        "hpa",
+                        "network_policy"
+                    ]
+                },
+                {
+                    "id": "ops_003",
+                    "type": "terraform",
+                    "prompt": "Write Terraform modules for a production AWS infrastructure:\n1. VPC with public/private subnets across 3 AZs\n2. ECS Fargate cluster with service mesh\n3. RDS PostgreSQL with Multi-AZ and read replicas\n4. ElastiCache Redis cluster\n5. ALB with WAF rules\n6. CloudWatch alarms and dashboards\n7. S3 + CloudFront for static assets\n8. Proper IAM roles with least privilege\nFollow Terraform best practices: modules, remote state, workspaces.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "terraform",
+                        "aws",
+                        "infrastructure",
+                        "iac"
+                    ]
+                },
+                {
+                    "id": "ops_004",
+                    "type": "docker",
+                    "prompt": "Create optimized multi-stage Dockerfiles for:\n1. Python FastAPI app (final image <100MB)\n2. Node.js Next.js app (final image <150MB)\n3. Go gRPC service (final image <20MB)\n\nFor each:\n- Multi-stage build with separate build/runtime stages\n- Non-root user\n- Security scanning with Trivy\n- Health check instructions\n- .dockerignore\n- Build cache optimization\n- Vulnerability-free base images\nAlso provide docker-compose.yml for local development.",
+                    "difficulty": "medium",
+                    "tags": [
+                        "docker",
+                        "multi_stage",
+                        "optimization",
+                        "security"
+                    ]
+                },
+                {
+                    "id": "ops_005",
+                    "type": "monitoring",
+                    "prompt": "Design a complete monitoring and alerting stack for a production microservices application:\n1. Prometheus metrics collection with service discovery\n2. Grafana dashboards for RED metrics (Rate, Errors, Duration)\n3. AlertManager rules with PagerDuty integration\n4. Log aggregation with Loki\n5. Distributed tracing with Tempo\n6. SLO-based alerting with burn rate alerts\nProvide all configuration files and a docker-compose for the full stack.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "prometheus",
+                        "grafana",
+                        "alerting",
+                        "slo"
+                    ]
+                },
+                {
+                    "id": "ops_006",
+                    "type": "disaster_recovery",
+                    "prompt": "Design and implement a disaster recovery plan for a multi-region application:\n1. RPO/RTO requirements definition\n2. Database replication strategy (async cross-region)\n3. DNS failover with Route53 health checks\n4. Data backup and restore procedures\n5. Chaos engineering tests (region failure simulation)\n6. DR drill runbook\n7. Cost analysis of warm vs cold standby\nProvide Terraform code and bash scripts for automated failover.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "disaster_recovery",
+                        "multi_region",
+                        "failover",
+                        "chaos"
+                    ]
+                },
+                {
+                    "id": "ops_007",
+                    "type": "gitops",
+                    "prompt": "Set up a GitOps workflow using ArgoCD for Kubernetes:\n1. Application definitions with sync policies\n2. Multi-environment setup (dev/staging/prod)\n3. Automated image updates with image updater\n4. Rollback on failed health checks\n5. Sealed secrets integration\n6. Diff preview on PRs\n7. Notification to Slack on sync status\nProvide complete directory structure with all manifests.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "gitops",
+                        "argocd",
+                        "kubernetes",
+                        "continuous_deployment"
+                    ]
+                },
+                {
+                    "id": "ops_008",
+                    "type": "load_testing",
+                    "prompt": "Create a comprehensive load testing suite for a REST API using Locust:\n1. Realistic user behavior simulation (browse, search, add to cart, checkout)\n2. Ramp-up and sustained load patterns\n3. Performance assertions (p95 < 200ms, error rate < 0.1%)\n4. Resource monitoring during tests (CPU, memory, DB connections)\n5. Automatic report generation with charts\n6. CI integration for regression detection\n7. Distributed load generation across multiple workers\nProvide complete Locust files and CI pipeline config.",
+                    "difficulty": "medium",
+                    "tags": [
+                        "load_testing",
+                        "locust",
+                        "performance",
+                        "ci"
+                    ]
+                }
+            ]
+        },
+        "reasoning": {
+            "expert_id": 7,
+            "templates": [
+                {
+                    "id": "rsn_001",
+                    "type": "system_design",
+                    "prompt": "Design a URL shortener that handles 100M URLs/day with:\n1. Requirements analysis (functional + non-functional)\n2. API design\n3. Database schema (hashing strategy, collision handling)\n4. System architecture diagram\n5. Scaling strategy (read replicas, caching, CDN)\n6. Analytics pipeline (click tracking, geo, referrer)\n7. Abuse prevention (rate limiting, blocklist)\n8. Cost estimation\nProvide both high-level architecture AND working Python implementation of core components.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "system_design",
+                        "url_shortener",
+                        "scaling"
+                    ]
+                },
+                {
+                    "id": "rsn_002",
+                    "type": "algorithm_design",
+                    "prompt": "A trading platform needs to match buy/sell orders in real-time with these rules:\n1. Price-time priority (best price first, then earliest)\n2. Support for limit and market orders\n3. Partial fills allowed\n4. Must handle 100K orders/second\n5. Must maintain order book state\n6. Support for cancel and modify operations\n\nDesign and implement the matching engine in Python. Analyze time complexity for each operation. Include stress tests that verify correctness with concurrent modifications.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "matching_engine",
+                        "trading",
+                        "algorithm",
+                        "performance"
+                    ]
+                },
+                {
+                    "id": "rsn_003",
+                    "type": "architecture_analysis",
+                    "prompt": "You're given two competing architecture proposals for a real-time analytics platform processing 1TB/day:\n\n**Option A**: Kafka → Flink → ClickHouse → Grafana\n**Option B**: Kinesis → Lambda → DynamoDB → Custom Dashboard\n\nPerform a rigorous comparative analysis:\n1. Latency characteristics (p50, p95, p99)\n2. Cost at scale ($1TB/day, $10TB/day, $100TB/day)\n3. Operational complexity and team skill requirements\n4. Failure modes and recovery strategies\n5. Schema evolution flexibility\n6. Query flexibility and complexity of ad-hoc analysis\n7. Vendor lock-in assessment\n\nProvide a final recommendation with justification.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "architecture",
+                        "analytics",
+                        "kafka",
+                        "comparison"
+                    ]
+                },
+                {
+                    "id": "rsn_004",
+                    "type": "optimization",
+                    "prompt": "This Python function processes image thumbnails and takes 30 seconds for a batch of 1000 images. Optimize it to complete in under 2 seconds:\n\n```python\ndef generate_thumbnails(image_paths, output_dir, sizes=[(128,128), (256,256), (512,512)]):\n    results = []\n    for path in image_paths:\n        img = Image.open(path)\n        for size in sizes:\n            thumb = img.copy()\n            thumb.thumbnail(size, Image.LANCZOS)\n            name = f\"{Path(path).stem}_{size[0]}x{size[1]}.webp\"\n            output_path = os.path.join(output_dir, name)\n            thumb.save(output_path, 'WEBP', quality=85)\n            results.append(output_path)\n    return results\n```\n\nApply ALL relevant optimizations: concurrency, batching, memory management, I/O, format selection, progressive loading. Explain the expected speedup from each optimization.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "optimization",
+                        "image_processing",
+                        "concurrency",
+                        "performance"
+                    ]
+                },
+                {
+                    "id": "rsn_005",
+                    "type": "tradeoff_analysis",
+                    "prompt": "A startup needs to choose a database for their product. Requirements:\n- 50M records growing 1M/month\n- Mix of OLTP (user actions) and OLAP (analytics dashboards)\n- Full-text search on user-generated content\n- Geospatial queries for nearby users\n- Multi-tenant with row-level security\n- Budget: $2000/month cloud spend\n\nAnalyze these options with quantified trade-offs:\n1. PostgreSQL (single database, all features)\n2. PostgreSQL + Elasticsearch + Redis (polyglot)\n3. CockroachDB (distributed SQL)\n4. MongoDB Atlas + Atlas Search\n5. Supabase (managed Postgres)\n\nFor each: performance projections, operational burden, migration difficulty, cost trajectory, and risk factors. Final recommendation.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "database_selection",
+                        "trade_offs",
+                        "architecture"
+                    ]
+                },
+                {
+                    "id": "rsn_006",
+                    "type": "code_reasoning",
+                    "prompt": "What does this function compute? Prove its correctness, analyze its time and space complexity, and suggest optimizations:\n\n```python\ndef mystery(arr):\n    n = len(arr)\n    dp = [1] * n\n    parent = [-1] * n\n    \n    for i in range(1, n):\n        for j in range(i):\n            if arr[j] < arr[i] and dp[j] + 1 > dp[i]:\n                dp[i] = dp[j] + 1\n                parent[i] = j\n    \n    max_idx = dp.index(max(dp))\n    result = []\n    while max_idx != -1:\n        result.append(arr[max_idx])\n        max_idx = parent[max_idx]\n    \n    return result[::-1]\n```\n\nProvide: formal proof of correctness using loop invariants, Big-O analysis, and an O(n log n) optimized version using patience sorting.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "dynamic_programming",
+                        "lis",
+                        "proof",
+                        "complexity"
+                    ]
+                },
+                {
+                    "id": "rsn_007",
+                    "type": "distributed_consensus",
+                    "prompt": "Implement the Raft consensus algorithm in Python for a distributed key-value store. Include:\n1. Leader election with randomized timeouts\n2. Log replication with consistency guarantees\n3. Membership changes (add/remove servers)\n4. Log compaction with snapshots\n5. Client interaction with linearizability\n6. Network partition handling\nSimulate a 5-node cluster and demonstrate correctness during leader failure and network partition scenarios.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "raft",
+                        "consensus",
+                        "distributed_systems",
+                        "kv_store"
+                    ]
+                },
+                {
+                    "id": "rsn_008",
+                    "type": "multi_step_reasoning",
+                    "prompt": "Analyze this production issue step-by-step:\n\nSymptoms:\n- API latency spiked from 50ms to 5s at 2:30 AM\n- Database CPU went from 30% to 95%\n- No deployment occurred in the last 24 hours\n- Error rate increased from 0.01% to 15%\n- The spike correlates with a cron job that runs at 2:30 AM\n- pg_stat_activity shows 200 active queries (normal: 20)\n- Most active queries are the same SELECT with different parameters\n\nPerform: root cause analysis, provide 3 hypotheses ranked by probability, suggest diagnostic queries, propose immediate mitigation, and design a permanent fix. Show your reasoning chain for each hypothesis.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "incident_analysis",
+                        "database",
+                        "performance",
+                        "reasoning"
+                    ]
+                }
+            ]
+        },
+        "compliance": {
+            "expert_id": 8,
+            "templates": [
+                {
+                    "id": "cmp_001",
+                    "type": "gdpr",
+                    "prompt": "Implement a GDPR-compliant data handling layer for a user management system:\n1. Right to erasure (cascade delete across all services)\n2. Right to data portability (export to standard format)\n3. Consent management with granular preferences\n4. Data retention policies with automatic cleanup\n5. Audit log of all data access\n6. Data Processing Agreement (DPA) enforcement\n7. Pseudonymization for analytics\nProvide Python implementation with Django models.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "gdpr",
+                        "privacy",
+                        "data_erasure",
+                        "consent"
+                    ]
+                },
+                {
+                    "id": "cmp_002",
+                    "type": "pci_dss",
+                    "prompt": "Implement PCI DSS compliant payment card handling:\n1. Card data tokenization (never store raw PANs)\n2. Encryption at rest and in transit\n3. Access control with MFA for card data access\n4. Audit logging of all cardholder data access\n5. Network segmentation validation\n6. Key management lifecycle\n7. Vulnerability scanning integration\nPython implementation with compliance verification tests.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "pci_dss",
+                        "payment",
+                        "tokenization",
+                        "encryption"
+                    ]
+                },
+                {
+                    "id": "cmp_003",
+                    "type": "hipaa",
+                    "prompt": "Build a HIPAA-compliant messaging system for healthcare providers:\n1. End-to-end encryption for PHI\n2. Access controls based on care team membership\n3. Audit trail for all PHI access (who, what, when, why)\n4. Automatic session timeout\n5. Breach detection and notification system\n6. BAA (Business Associate Agreement) enforcement layer\n7. Minimum necessary standard enforcement\nPython/FastAPI implementation with compliance tests.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "hipaa",
+                        "phi",
+                        "healthcare",
+                        "encryption"
+                    ]
+                },
+                {
+                    "id": "cmp_004",
+                    "type": "soc2",
+                    "prompt": "Implement SOC 2 Type II controls for a SaaS application:\n1. Change management workflow with approval gates\n2. Access review automation (quarterly recertification)\n3. Vulnerability management pipeline\n4. Incident response automation\n5. Data classification and handling policies\n6. Vendor risk assessment integration\n7. Evidence collection automation for audits\nProvide Python scripts and CI/CD integration.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "soc2",
+                        "compliance",
+                        "audit",
+                        "controls"
+                    ]
+                },
+                {
+                    "id": "cmp_005",
+                    "type": "accessibility",
+                    "prompt": "Audit and fix this React component for WCAG 2.1 AA compliance:\n\n```jsx\nfunction DataTable({ data, onRowClick }) {\n  return (\n    <div className='table' onClick={() => {}}>\n      <div className='header'>\n        <span style={{color: '#aaa', fontSize: '11px'}}>Name</span>\n        <span style={{color: '#aaa', fontSize: '11px'}}>Status</span>\n      </div>\n      {data.map((row, i) => (\n        <div key={i} className='row' onClick={() => onRowClick(row)} style={{cursor: 'pointer'}}>\n          <span>{row.name}</span>\n          <span style={{color: row.active ? 'green' : 'red'}}>\n            {row.active ? '●' : '●'}\n          </span>\n        </div>\n      ))}\n    </div>\n  );\n}\n```\n\nIdentify all WCAG violations (with specific success criteria), provide fixes, add screen reader support, keyboard navigation, and ARIA attributes.",
+                    "difficulty": "medium",
+                    "tags": [
+                        "wcag",
+                        "accessibility",
+                        "a11y",
+                        "react"
+                    ]
+                },
+                {
+                    "id": "cmp_006",
+                    "type": "input_validation",
+                    "prompt": "Create a comprehensive input validation and compliance middleware for a REST API handling financial data:\n1. Request schema validation with JSON Schema\n2. PII detection and redaction in logs\n3. SQL injection prevention\n4. XSS prevention in stored user content\n5. Rate limiting per compliance requirements\n6. Request size limits\n7. Content-type enforcement\n8. CORS policy enforcement\nPython/FastAPI middleware with compliance audit trail.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "validation",
+                        "pii",
+                        "financial",
+                        "middleware"
+                    ]
+                },
+                {
+                    "id": "cmp_007",
+                    "type": "data_governance",
+                    "prompt": "Implement a data governance framework for a multi-cloud data platform:\n1. Data catalog with automatic metadata discovery\n2. Data lineage tracking (source → transformations → destination)\n3. Data quality rules engine with automated checks\n4. Data classification (public, internal, confidential, restricted)\n5. Access policies based on classification\n6. Data retention and disposal automation\n7. Cross-border data transfer compliance (GDPR, CCPA)\nPython implementation with integration points for Airflow and dbt.",
+                    "difficulty": "expert",
+                    "tags": [
+                        "data_governance",
+                        "data_catalog",
+                        "lineage",
+                        "classification"
+                    ]
+                },
+                {
+                    "id": "cmp_008",
+                    "type": "license_compliance",
+                    "prompt": "Build an open-source license compliance scanner for a software project:\n1. Scan all dependencies (direct + transitive)\n2. Identify license types (MIT, Apache, GPL, LGPL, etc.)\n3. Check compatibility with project license\n4. Flag copyleft infections (GPL in proprietary project)\n5. Generate SBOM (Software Bill of Materials) in SPDX format\n6. Policy engine (allowed/denied/review-required licenses)\n7. CI integration with PR comments\nPython implementation using pip, npm metadata.",
+                    "difficulty": "hard",
+                    "tags": [
+                        "license",
+                        "sbom",
+                        "spdx",
+                        "compliance_scanner"
+                    ]
+                }
+            ]
+        }
+    }
+}

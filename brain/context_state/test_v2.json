@@ -1,0 +1,35 @@
+{
+  "session_id": "test_v2",
+  "created_at": "2026-02-28T10:36:20.974498+00:00",
+  "instruction_anchors": [
+    {
+      "id": "anchor_1772274980974",
+      "instruction": "Never modify the API layer",
+      "priority": "critical",
+      "source": "user",
+      "created_at": "2026-02-28T10:36:20.974518+00:00",
+      "active": true
+    }
+  ],
+  "decision_records": [
+    {
+      "id": "decision_1772274980974",
+      "decision": "Use pattern matching",
+      "rationale": "No deps",
+      "scope": "implementation",
+      "alternatives": [],
+      "created_at": "2026-02-28T10:36:20.974871+00:00",
+      "status": "active"
+    }
+  ],
+  "active_task_chain": [],
+  "session_context": {
+    "project": null,
+    "working_directory": null,
+    "current_objective": null,
+    "constraints": []
+  },
+  "turn_count": 0,
+  "coherence_checkpoints": [],
+  "updated_at": "2026-02-28T10:36:20.974881+00:00"
+}
