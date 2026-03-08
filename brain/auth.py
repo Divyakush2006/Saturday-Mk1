@@ -247,7 +247,11 @@ class AuthDB:
             log.info("AuthDB: using PostgreSQL backend")
         else:
             if db_path is None:
-                db_path = str(Path(__file__).parent.parent / "saturday.db")
+                # Vercel has a read-only filesystem — use /tmp
+                if os.getenv("VERCEL"):
+                    db_path = "/tmp/saturday.db"
+                else:
+                    db_path = str(Path(__file__).parent.parent / "saturday.db")
             self.db_path = db_path
             log.info(f"AuthDB: using SQLite backend ({db_path})")
         self._init_db()
