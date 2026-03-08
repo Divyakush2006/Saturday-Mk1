@@ -339,7 +339,6 @@ def create_app(project_root: str = ".", api_key: Optional[str] = None):
     async def chat(
         req: ChatRequest,
         authorization: Optional[str] = Header(default=None),
-        _=Security(verify_key),
     ):
         """Conversational AI — Fast mode or MK1-Pro (full engine pipeline)."""
         import time as _time
