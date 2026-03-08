@@ -84,7 +84,14 @@ class Saturday:
 
     def __init__(self, project_root: str = ".", memory_dir: Optional[str] = None):
         self.project_root = Path(project_root).resolve()
-        self.memory_dir = Path(memory_dir or self.project_root / ".saturday_memory")
+
+        # Vercel has a read-only filesystem — use /tmp for writable data
+        if os.getenv("VERCEL"):
+            default_memory = Path("/tmp/.saturday_memory")
+        else:
+            default_memory = self.project_root / ".saturday_memory"
+
+        self.memory_dir = Path(memory_dir or default_memory)
         self.memory_dir.mkdir(parents=True, exist_ok=True)
 
         # Lazy-loaded engines
