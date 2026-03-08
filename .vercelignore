@@ -1,0 +1,60 @@
+# ═══════════════════════════════════════════
+# Saturday MK1 — Vercel Deploy Ignore
+# ═══════════════════════════════════════════
+# Exclude files not needed in the serverless bundle
+# to stay under the 250MB compressed limit.
+
+# Data & outputs (large, not needed at runtime)
+training_data/
+distillation_data/
+eval_results/
+browser_recordings/
+html_artifacts/
+
+# ML pipeline scripts (not needed at runtime)
+scripts/
+
+# Tests & scratch
+tests/
+scratch/
+test_output.txt
+test_results.log
+test_integration_report.txt
+
+# Development files
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local-only files
+.env
+.saturday_jwt_secret
+saturday.db
+.saturday_memory/
+saturday_model/
+
+# Empty/placeholder directories
+knowledge/
+conversations/
+annotations/
+implicit/
+code_tracker/
+context_state/
+
+# IDE & git
+.vscode/
+.idea/
+.git/
+.gitignore
+*.swp
+
+# Agent workflows (not needed in production)
+.agents/
+
+# Docs (not needed at runtime)
+*.md
+saturday_blueprint.md.resolved
+
+# Configs not needed at runtime
+scripts/configs/

@@ -1,0 +1,86 @@
+{
+  "session_id": "test_verify",
+  "created_at": "2026-02-28T10:34:43.667899+00:00",
+  "instruction_anchors": [
+    {
+      "id": "anchor_1772274883667",
+      "instruction": "Never modify the API layer",
+      "priority": "critical",
+      "source": "user",
+      "created_at": "2026-02-28T10:34:43.667919+00:00",
+      "active": true
+    },
+    {
+      "id": "anchor_1772274900308",
+      "instruction": "Never modify the API layer",
+      "priority": "critical",
+      "source": "user",
+      "created_at": "2026-02-28T10:35:00.308794+00:00",
+      "active": true
+    },
+    {
+      "id": "anchor_1772274912756",
+      "instruction": "Never modify the API layer",
+      "priority": "critical",
+      "source": "user",
+      "created_at": "2026-02-28T10:35:12.756599+00:00",
+      "active": true
+    },
+    {
+      "id": "anchor_1772274942727",
+      "instruction": "Never modify the API layer",
+      "priority": "critical",
+      "source": "user",
+      "created_at": "2026-02-28T10:35:42.727161+00:00",
+      "active": true
+    }
+  ],
+  "decision_records": [
+    {
+      "id": "decision_1772274883668",
+      "decision": "Use pattern matching over AST",
+      "rationale": "No heavy deps",
+      "scope": "implementation",
+      "alternatives": [],
+      "created_at": "2026-02-28T10:34:43.668213+00:00",
+      "status": "active"
+    },
+    {
+      "id": "decision_1772274900309",
+      "decision": "Use pattern matching over AST",
+      "rationale": "No heavy deps",
+      "scope": "implementation",
+      "alternatives": [],
+      "created_at": "2026-02-28T10:35:00.309214+00:00",
+      "status": "active"
+    },
+    {
+      "id": "decision_1772274912756",
+      "decision": "Use pattern matching over AST",
+      "rationale": "No heavy deps",
+      "scope": "implementation",
+      "alternatives": [],
+      "created_at": "2026-02-28T10:35:12.756995+00:00",
+      "status": "active"
+    },
+    {
+      "id": "decision_1772274942727",
+      "decision": "Use pattern matching over AST",
+      "rationale": "No heavy deps",
+      "scope": "implementation",
+      "alternatives": [],
+      "created_at": "2026-02-28T10:35:42.727572+00:00",
+      "status": "active"
+    }
+  ],
+  "active_task_chain": [],
+  "session_context": {
+    "project": null,
+    "working_directory": null,
+    "current_objective": null,
+    "constraints": []
+  },
+  "turn_count": 0,
+  "coherence_checkpoints": [],
+  "updated_at": "2026-02-28T10:35:42.727583+00:00"
+}
